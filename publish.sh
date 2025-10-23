@@ -29,7 +29,7 @@ cp -r README.md LICENSE dist package.json package-lock.json "${publish_dir}/"
 jq ".version = \"${version}\" | .name = \"${name}\" | del(.scripts.prepare)" package.json > "${publish_dir}/package.json"
 
 if [ -z "$DRY_RUN" ]; then
-    npm publish "${publish_dir}" --tag "${tag}"
+    npm publish "${publish_dir}" --tag "${tag}" --access public
 else
-    npm publish "${publish_dir}" --tag "${tag}" --dry-run
+    npm publish "${publish_dir}" --tag "${tag}" --access public --dry-run
 fi

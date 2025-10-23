@@ -1,15 +1,24 @@
-name: Publish NPM
+name: Continuous Integration
 
 on:
+  push:
+    branches:
+      - 'main'
   workflow_dispatch:
     inputs:
-      dist-tag:
+      publish_tag:
+        description: 'Npm tag to publish'
         type: choice
+        default: dev
         options:
           - dev
           - latest
-        default: dev
-        description: Npm dist tag
+        required: true
+      dry_run:
+        description: 'Dry run'
+        type: boolean
+        default: false
+
 jobs:
   publish:
     name: Publish NPM
@@ -22,13 +31,14 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Publish package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_PUBLISH_TAG: ${{ inputs.dist-tag }}
-          NPM_PACKAGE_SCOPE: ${{ vars.NPM_PACKAGE_SCOPE }}
+          NPM_PUBLISH_TAG: ${{ github.input.publish_tag || 'dev' }}
+          NPM_PACKAGE_SCOPE: "@${{ github.repository_owner }}"
+          DRY_RUN: ${{ github.input.dry_run || '0' }}
         run: ./publish.sh
