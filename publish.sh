@@ -1,11 +1,9 @@
 #!/bin/sh
 set -e
 
-package_info=$(cat package.json)
-scope=${NPM_PACKAGE_SCOPE:-$(echo "$package_info" | jq .name -r | grep '/' | cut -d'/' -f1)}
-name=${NPM_PACKAGE_NAME:-$(echo "$package_info" | jq .name -r | cut -d'/' -f2)}
-
-version=$(echo "$package_info" | jq .version -r)
+scope=${NPM_PACKAGE_SCOPE:-""}
+name=$(npm pkg get name | tr -d '"') 
+version=$(npm pkg get version | tr -d '"')
 tag=${NPM_PUBLISH_TAG:-dev}
 
 if [ "$scope" != "" ]; then
@@ -16,20 +14,17 @@ if [ "$tag" = "dev" ]; then
     version="${version}-dev.$(git rev-parse --short HEAD)"
 fi
 
+cp package.json package.json.bak
 npm ci
 npm run build
-
-# Creating a temporary directory for publishing.
-#
-# This allows us to modify the version and name of the published package
-# without having to commit changes to the repo. Which is useful for tagged
-# and scoped package releases.
-publish_dir="$(mktemp -d)"
-cp -r README.md LICENSE dist package.json package-lock.json "${publish_dir}/"
-jq ".version = \"${version}\" | .name = \"${name}\" | del(.scripts.prepare)" package.json > "${publish_dir}/package.json"
+npm pkg set version="${version}"
+npm pkg set name="${name}"
+npm pkg delete scripts.prepare
 
 if [ -z "$DRY_RUN" ]; then
-    npm publish "${publish_dir}" --tag "${tag}"
+    npm publish --tag "${tag}" --access public
 else
-    npm publish "${publish_dir}" --tag "${tag}" --dry-run
+    npm publish --tag "${tag}" --access public --dry-run
 fi
+
+mv package.json.bak package.json
