@@ -165,9 +165,7 @@ export async function admitMultisig(
         datetime: timestamp,
     });
 
-    await client
-        .ipex()
-        .submitAdmit(multisigAID.name, admit, sigs, end, [recipientAID.prefix]);
+    await client.ipex().submitAdmit(multisigAID.name, admit, sigs, end);
 
     const mstate = multisigAID.state;
     const seal = [
@@ -370,9 +368,7 @@ export async function grantMultisig(
         datetime: timestamp,
     });
 
-    await client
-        .ipex()
-        .submitGrant(multisigAID.name, grant, sigs, end, [recipientAID.prefix]);
+    await client.ipex().submitGrant(multisigAID.name, grant, sigs, end);
 
     const mstate = multisigAID.state;
     const seal = [

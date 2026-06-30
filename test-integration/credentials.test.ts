@@ -255,9 +255,7 @@ test('single signature credentials', { timeout: 90000 }, async () => {
 
         const op = await issuerClient
             .ipex()
-            .submitGrant(issuerAid.name, grant, gsigs, gend, [
-                holderAid.prefix,
-            ]);
+            .submitGrant(issuerAid.name, grant, gsigs, gend);
         await waitOperation(issuerClient, op);
     });
 
@@ -289,7 +287,7 @@ test('single signature credentials', { timeout: 90000 }, async () => {
         });
         const op = await holderClient
             .ipex()
-            .submitAdmit(holderAid.name, admit, sigs, aend, [issuerAid.prefix]);
+            .submitAdmit(holderAid.name, admit, sigs, aend);
         await waitOperation(holderClient, op);
 
         await markAndRemoveNotification(holderClient, grantNotification);
@@ -328,7 +326,7 @@ test('single signature credentials', { timeout: 90000 }, async () => {
 
         const op = await verifierClient
             .ipex()
-            .submitApply(verifierAid.name, apply, sigs, [holderAid.prefix]);
+            .submitApply(verifierAid.name, apply, sigs);
         await waitOperation(verifierClient, op);
     });
 
@@ -364,9 +362,7 @@ test('single signature credentials', { timeout: 90000 }, async () => {
 
         const op = await holderClient
             .ipex()
-            .submitOffer(holderAid.name, offer, sigs, end, [
-                verifierAid.prefix,
-            ]);
+            .submitOffer(holderAid.name, offer, sigs, end);
         await waitOperation(holderClient, op);
     });
 
@@ -398,7 +394,7 @@ test('single signature credentials', { timeout: 90000 }, async () => {
 
         const op = await verifierClient
             .ipex()
-            .submitAgree(verifierAid.name, agree, sigs, [holderAid.prefix]);
+            .submitAgree(verifierAid.name, agree, sigs);
         await waitOperation(verifierClient, op);
     });
 
@@ -437,9 +433,7 @@ test('single signature credentials', { timeout: 90000 }, async () => {
 
         const op = await holderClient
             .ipex()
-            .submitGrant(holderAid.name, grant2, gsigs2, gend2, [
-                verifierAid.prefix,
-            ]);
+            .submitGrant(holderAid.name, grant2, gsigs2, gend2);
         await waitOperation(holderClient, op);
     });
 
@@ -465,9 +459,7 @@ test('single signature credentials', { timeout: 90000 }, async () => {
 
         const op = await verifierClient
             .ipex()
-            .submitAdmit(verifierAid.name, admit3, sigs3, aend3, [
-                holderAid.prefix,
-            ]);
+            .submitAdmit(verifierAid.name, admit3, sigs3, aend3);
         await waitOperation(verifierClient, op);
 
         await markAndRemoveNotification(verifierClient, verifierGrantNote);
@@ -565,9 +557,7 @@ test('single signature credentials', { timeout: 90000 }, async () => {
 
         const op = await holderClient
             .ipex()
-            .submitGrant(holderAid.name, grant, gsigs, gend, [
-                legalEntityAid.prefix,
-            ]);
+            .submitGrant(holderAid.name, grant, gsigs, gend);
         await waitOperation(holderClient, op);
     });
 
@@ -588,9 +578,7 @@ test('single signature credentials', { timeout: 90000 }, async () => {
 
         const op = await legalEntityClient
             .ipex()
-            .submitAdmit(legalEntityAid.name, admit, sigs, aend, [
-                holderAid.prefix,
-            ]);
+            .submitAdmit(legalEntityAid.name, admit, sigs, aend);
         await waitOperation(legalEntityClient, op);
 
         await markAndRemoveNotification(legalEntityClient, grantNotification);

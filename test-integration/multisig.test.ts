@@ -955,9 +955,7 @@ test('multisig', async function run() {
         datetime: stamp,
     });
 
-    op1 = await client1
-        .ipex()
-        .submitGrant('multisig', grant, gsigs, end, [holder]);
+    op1 = await client1.ipex().submitGrant('multisig', grant, gsigs, end);
 
     mstate = m['state'];
     seal = [
@@ -1003,9 +1001,7 @@ test('multisig', async function run() {
         datetime: stamp,
     });
 
-    op2 = await client2
-        .ipex()
-        .submitGrant('multisig', grant2, gsigs2, end2, [holder]);
+    op2 = await client2.ipex().submitGrant('multisig', grant2, gsigs2, end2);
 
     sigers = gsigs2.map((sig) => new signify.Siger({ qb64: sig }));
 
@@ -1045,9 +1041,7 @@ test('multisig', async function run() {
         datetime: stamp,
     });
 
-    op3 = await client3
-        .ipex()
-        .submitGrant('multisig', grant3, gsigs3, end3, [holder]);
+    op3 = await client3.ipex().submitGrant('multisig', grant3, gsigs3, end3);
 
     sigers = gsigs3.map((sig) => new signify.Siger({ qb64: sig }));
 
@@ -1084,9 +1078,7 @@ test('multisig', async function run() {
         recipient: m['prefix'],
     });
 
-    op4 = await client4
-        .ipex()
-        .submitAdmit('holder', admit, asigs, aend, [m['prefix']]);
+    op4 = await client4.ipex().submitAdmit('holder', admit, asigs, aend);
 
     await Promise.all([
         waitOperation(client1, op1),

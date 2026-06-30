@@ -454,9 +454,6 @@ test('multisig-vlei-issuance', async function run() {
         await Promise.all(opList2.map((op) => waitOperation(clientQAR2, op)));
         await Promise.all(opList3.map((op) => waitOperation(clientQAR3, op)));
 
-        await waitAndMarkNotification(clientQAR1, '/multisig/rpy');
-        await waitAndMarkNotification(clientQAR2, '/multisig/rpy');
-
         [oobiQVIbyQAR1, oobiQVIbyQAR2, oobiQVIbyQAR3] = await Promise.all([
             clientQAR1.oobis().get(aidQVI.name, 'agent'),
             clientQAR2.oobis().get(aidQVI.name, 'agent'),
@@ -779,9 +776,6 @@ test('multisig-vlei-issuance', async function run() {
         await Promise.all(opList1.map((op) => waitOperation(clientLAR1, op)));
         await Promise.all(opList2.map((op) => waitOperation(clientLAR2, op)));
         await Promise.all(opList3.map((op) => waitOperation(clientLAR3, op)));
-
-        await waitAndMarkNotification(clientLAR1, '/multisig/rpy');
-        await waitAndMarkNotification(clientLAR2, '/multisig/rpy');
 
         [oobiLEbyLAR1, oobiLEbyLAR2, oobiLEbyLAR3] = await Promise.all([
             clientLAR1.oobis().get(aidLE.name, 'agent'),
