@@ -52,15 +52,11 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   test:
-    name: Run integration test using keria:${{ matrix.keria-version }}
-    runs-on: ${{ matrix.os }}
+    name: Run integration tests with pinned global-vlei/keria
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: ['ubuntu-latest']
-        keria-version: ['0.2.0-dev6']
         node-version: ['20']
-    env:
-      KERIA_IMAGE_TAG: ${{ matrix.keria-version }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -76,7 +72,8 @@ jobs:
       - name: Print docker compose config
         run: docker compose config
       - name: Start dependencies
-        run: docker compose up --wait --pull always
+        run: docker compose up --build --wait
+
       - name: Run integration test
         run: npm run test:integration
       - name: Print logs
