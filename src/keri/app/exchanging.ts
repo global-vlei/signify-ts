@@ -60,42 +60,36 @@ export class Exchanges {
 
     /**
      * Send exn messages to list of recipients
-     * @async
-     * @returns {Promise<any>} A promise to the list of replay messages
-     * @param name
-     * @param topic
-     * @param sender
-     * @param route
-     * @param payload
-     * @param embeds
-     * @param recipients
      */
     async send(
         name: string,
         topic: string,
         sender: HabState,
         route: string,
-        payload: Dict<any>,
-        embeds: Dict<any>,
-        recipients: string[]
+        payload: Record<string, unknown>,
+        embeds: Record<string, unknown>,
+        recipient: string | string[]
     ): Promise<any> {
-        for (const recipient of recipients) {
+        const recipients =
+            typeof recipient === 'string' ? [recipient] : recipient;
+        if (!Array.isArray(recipients) || recipients.length === 0) {
+            throw new Error(
+                'Recipient must be a string or non-empty array of strings.'
+            );
+        }
+
+        let result: any;
+        for (const recp of recipients) {
             const [exn, sigs, atc] = await this.createExchangeMessage(
                 sender,
                 route,
                 payload,
                 embeds,
-                recipient
+                recp
             );
-            return await this.sendFromEvents(
-                name,
-                topic,
-                exn,
-                sigs,
-                atc,
-                recipients
-            );
+            result = await this.sendFromEvents(name, topic, exn, sigs, atc);
         }
+        return result;
     }
 
     /**
@@ -114,20 +108,18 @@ export class Exchanges {
         topic: string,
         exn: Serder,
         sigs: string[],
-        atc: string,
-        recipients: string[]
+        atc: string
     ): Promise<any> {
         const path = `/identifiers/${name}/exchanges`;
         const method = 'POST';
-        const data: any = {
+
+        const res = await this.client.fetch(path, method, {
             tpc: topic,
             exn: exn.sad,
             sigs: sigs,
             atc: atc,
-            rec: recipients,
-        };
+        });
 
-        const res = await this.client.fetch(path, method, data);
         return await res.json();
     }
 

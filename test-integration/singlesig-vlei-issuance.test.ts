@@ -479,7 +479,7 @@ async function getOrCreateRegistry(
     aid: Aid,
     registryName: string
 ): Promise<{ name: string; regk: string }> {
-    let registries = await client.registries().list(aid.name);
+    const registries = await client.registries().list(aid.name);
     if (registries.length > 0) {
         assert.equal(registries.length, 1);
     } else {
@@ -487,7 +487,11 @@ async function getOrCreateRegistry(
             .registries()
             .create({ name: aid.name, registryName: registryName });
         await waitOperation(client, await regResult.op());
-        registries = await client.registries().list(aid.name);
+        return await retry(async () => {
+            const regs = await client.registries().list(aid.name);
+            assert.equal(regs.length, 1);
+            return regs[0];
+        });
     }
     return registries[0];
 }
@@ -510,7 +514,7 @@ async function sendGrantMessage(
 
     let op = await senderClient
         .ipex()
-        .submitGrant(senderAid.name, grant, gsigs, gend, [recipientAid.prefix]);
+        .submitGrant(senderAid.name, grant, gsigs, gend);
     op = await waitOperation(senderClient, op);
 }
 
@@ -536,7 +540,7 @@ async function sendAdmitMessage(
 
     let op = await senderClient
         .ipex()
-        .submitAdmit(senderAid.name, admit, sigs, aend, [recipientAid.prefix]);
+        .submitAdmit(senderAid.name, admit, sigs, aend);
     op = await waitOperation(senderClient, op);
 
     await markAndRemoveNotification(senderClient, grantNotification);

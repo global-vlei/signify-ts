@@ -163,7 +163,7 @@ export class Challenges {
             '/challenge/response',
             { words: words },
             {},
-            [recipient]
+            recipient
         );
         return resp;
     }

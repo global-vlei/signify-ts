@@ -232,7 +232,7 @@ describe('exchange', () => {
         const serder = new Serder(ked0);
 
         let lastCall = fetchMock.mock.calls[fetchMock.mock.calls.length - 1]!;
-        await exchange.sendFromEvents('aid1', '', serder, [''], '', []);
+        await exchange.sendFromEvents('aid1', '', serder, [''], '');
         lastCall = fetchMock.mock.calls[fetchMock.mock.calls.length - 1]!;
         assert.equal(lastCall[0]!, url + '/identifiers/aid1/exchanges');
         assert.equal(lastCall[1]!.method, 'POST');
