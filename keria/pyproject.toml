@@ -1,0 +1,11 @@
+# Paired with signify-ts fork deltas on restore/fork-signify-deltas
+[project]
+name = "signify-ts-keria"
+version = "0.0.0"
+requires-python = ">=3.12.2,<3.13"
+dependencies = [
+  "keria @ git+https://github.com/global-vlei/keria.git@f8e58ac3b74ac29acc51a5380b69074c48b3f539",
+]
+
+[tool.uv]
+package = false

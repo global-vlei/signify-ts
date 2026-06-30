@@ -21,13 +21,17 @@ services:
             - 7723:7723
 
     keria:
-        image: ${KERIA_IMAGE:-weboftrust/keria}:${KERIA_IMAGE_TAG:-0.2.0-rc1}
+        build:
+            context: ./keria
+            dockerfile: Dockerfile
+            platforms:
+                - linux/amd64
         environment:
             KERI_AGENT_CORS: 1
             <<: *python-env
         volumes:
             - ./config/keria.json:/keria/config/keri/cf/keria.json
-        command: start --config-dir /keria/config --config-file keria --name agent
+        command: start --config-dir /keria/config --config-file keria
         healthcheck:
             test: wget --spider http://keria:3902/spec.yaml
             <<: *healthcheck
